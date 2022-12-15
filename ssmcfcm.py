@@ -174,7 +174,7 @@ def calculate_centre(data,centre,degree,mL,mU,supervise,labels):
 
 def ssmcfcm(dataname,mL,mU,percent):
 
-    linkdata = ".\data\\"+dataname+".csv"
+    linkdata = ".\data\\"+dataname
     data,numClusters,labels = initData(linkdata)
     
     supervise =supervise_rand(len(data),percent)
@@ -189,13 +189,15 @@ def ssmcfcm(dataname,mL,mU,percent):
 
     clus_label = [np.argmax(degree[i]) for i in range(len(degree))]
 
-    # print(clus_label)
+    # print(labels)
+    # print(supervise)
+    # print(np.array(clus_label))
     # print(centre)
     # print(metrics.rand_score(clus_label,labels))
     # print(metrics.accuracy_score(clus_label,labels))
     return data,centre,labels,clus_label,supervise
 
 if __name__ == '__main__':
-    ssmcfcm('glass',2,5,20)
+    ssmcfcm('glass.csv',2,5,20)
 
 

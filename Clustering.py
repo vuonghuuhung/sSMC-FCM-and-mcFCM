@@ -1,12 +1,15 @@
 import mcfcm
 import ssmcfcm
 import MetricsCalculate
+import fnmatch
+import os
 
 
 from tkinter.ttk import *
 from tkinter import *
 import tkinter.scrolledtext as sctxt
 from PIL import ImageTk, Image
+
 
 #Open window in Tkinter
 win = Tk()
@@ -131,7 +134,7 @@ def runSSMC():
 #MCFCM INPUT
 mcdata = Label(win, text='Chọn dữ liệu')
 mcdata_ = Combobox(win)
-mcdata_['value'] = ('iris','wine','heart','glass')
+mcdata_['value'] = [f for f in os.listdir(".\\data\\") if fnmatch.fnmatch(f, '*.csv')]
 mcdata_.current(0)
 
 
@@ -149,7 +152,7 @@ RunMC = Button(win, text='Run',command=runMCFCM)
 ssmcdata = Label(win, text='Chọn dữ liệu')
 Frame(ssmcdata).pack(padx = 70, pady =8)
 ssmcdata_ = Combobox(win, width = 20)
-ssmcdata_['value'] = ('iris','wine','heart','glass')
+ssmcdata_['value'] = [f for f in os.listdir(".\\data\\") if fnmatch.fnmatch(f, '*.csv')]
 ssmcdata_.current(0)
 
 
