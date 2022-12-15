@@ -57,6 +57,7 @@ def supervise_rand(nums,percent=20):
 def initCentre(data,numClusters,supervise,labels):
     centre = np.zeros((numClusters,len(data[0])))
     count = [0]* numClusters
+    unSupCen = []
     for i in range(len(data)):
         if supervise[i] ==1:
             centre[labels[i]] += data[i]
@@ -64,8 +65,10 @@ def initCentre(data,numClusters,supervise,labels):
     for i in range(numClusters):
         if count[i] != 0:
             centre[i] = centre[i]/count[i]     
-        else: centre[i] = data[i] 
-    return centre
+        else:
+            centre[i] = data[i] 
+            unSupCen.append(i)
+    return centre,unSupCen
 
 
 def left(uik,sum_u,mL,mU):
@@ -171,14 +174,45 @@ def calculate_centre(data,centre,degree,mL,mU,supervise,labels):
     diff = np.linalg.norm(newCentre - centre)
     return np.array(newCentre),diff
 
+def hoanvi(arr):
+    if len(arr)==1: return [arr]
+    n=len(arr)
+    r=[]
+    for i in range(n):
+        temp = arr[:i]+ arr[i+1:]
+        p = hoanvi(temp)
+        for y in p:
+            r.append([arr[i]]+ y)
+    return r
 
-def ssmcfcm(dataname,mL,mU,percent):
+def synchronize_label(labels,clus_label,numClusters,centre):
+    max_accur =0.0
+    list_ = list(range(numClusters))
+    new_labels = clus_label
+    newidx = list_
+    for temp_ in hoanvi(list_):
+        dict_rep = {a:b for a,b in zip(list_,temp_)}
+        temp_labels = [dict_rep[a] for a in clus_label]
+        accur = metrics.accuracy_score(temp_labels,labels) 
+        if accur >max_accur:
+            max_accur = accur
+            new_labels = temp_labels
+            newidx = temp_
+
+    newcentre = centre.copy()
+    for i,j in zip(newidx,list_):
+        newcentre[i] = centre[j]
+    
+    return new_labels,newcentre
+
+
+def ssmcfcm(dataname='iris',mL=2,mU=5,percent=20):
 
     linkdata = ".\data\\"+dataname+".csv"
     data,numClusters,labels = initData(linkdata)
     
     supervise =supervise_rand(len(data),percent)
-    centre = initCentre(data,numClusters,supervise,labels)
+    centre,unSupCen = initCentre(data,numClusters,supervise,labels)
     diff = 100
     epsilon = 0.005
     while diff > epsilon:
@@ -189,6 +223,9 @@ def ssmcfcm(dataname,mL,mU,percent):
 
     clus_label = [np.argmax(degree[i]) for i in range(len(degree))]
 
+    if len(unSupCen) >= 2:
+        clus_label,centre = synchronize_label(labels,clus_label,numClusters,centre)
+
     # print(clus_label)
     # print(centre)
     # print(metrics.rand_score(clus_label,labels))
@@ -196,6 +233,6 @@ def ssmcfcm(dataname,mL,mU,percent):
     return data,centre,labels,clus_label,supervise
 
 if __name__ == '__main__':
-    ssmcfcm('glass',2,5,20)
+    ssmcfcm()
 
 

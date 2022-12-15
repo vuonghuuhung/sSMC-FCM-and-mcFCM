@@ -35,7 +35,7 @@ def initData(linkdata):
     scaler = MinMaxScaler()
     scaler.fit(data)
     data = scaler.transform(data)
-    data = np.array(data)
+
     data = np.array(data)
     return data,numClusters,labels
 
@@ -166,6 +166,6 @@ def mcfcm(dataname='iris',mL=2,mU=4):
     return data,centre,labels,clus_label
 
 if __name__ == '__main__':
-    mcfcm('iris')
+    mcfcm()
 
 
