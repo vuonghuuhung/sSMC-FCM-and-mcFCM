@@ -59,7 +59,7 @@ def runMCFCM():
     mL = float(mc_mL_.get())
     mU = float(mc_mU_.get())
     if mL<mU and mL>1:
-        data,centre,labels,clus_label = mcfcm.mcfcm(dataname,mL,mU)
+        data,centre,labels,clus_label,looptimes = mcfcm.mcfcm(dataname,mL,mU)
 
         resultLabel.delete(1.0,END)
         resultData.delete(1.0,END)
@@ -81,9 +81,13 @@ def runMCFCM():
             resultData.insert(END,'Point '+str(i)+'   ||   '+ str(clus_label[i])+'   ||   '+str(labels[i])+'   ||   '+str(data[i])+'\n')
 
         resultScore.delete(1.0,END)
-        list_metrics = MetricsCalculate.getmetrics(labels,clus_label)
+        list_metrics = MetricsCalculate.getmetrics(labels,clus_label,centre,data)
+        resultScore.insert(END,'Số lần lặp: '+str(looptimes)+'\n')
         resultScore.insert(END,'Accuracy: '+str(list_metrics[0])+'\n')
         resultScore.insert(END,'RandIndex: '+str(list_metrics[1])+'\n')
+        resultScore.insert(END,'Davis-Bouldin: '+str(list_metrics[2])+'\n')
+        resultScore.insert(END,'Dunn Index: '+str(list_metrics[3])+'\n')
+        resultScore.insert(END,'ASWC score: '+str(list_metrics[4])+'\n')
 
     else:
         resultData.delete(1.0,END)
@@ -96,7 +100,7 @@ def runSSMC():
     mU = float(ssmc_mU_.get())
     sup = int(ssmc_sup_.get())
     if mL<mU and mL>1:
-        data,centre,labels,clus_label,supervise = ssmcfcm.ssmcfcm(dataname,mL,mU,sup)
+        data,centre,labels,clus_label,supervise,looptimes = ssmcfcm.ssmcfcm(dataname,mL,mU,sup)
 
         resultLabel.delete(1.0,END)
         resultData.delete(1.0,END)
@@ -119,9 +123,13 @@ def runSSMC():
 
 
         resultScore.delete(1.0,END)
-        list_metrics = MetricsCalculate.getmetrics(labels,clus_label)
+        list_metrics = MetricsCalculate.getmetrics(labels,clus_label,centre,data)
+        resultScore.insert(END,'Số lần lặp: '+str(looptimes)+'\n')
         resultScore.insert(END,'Accuracy: '+str(list_metrics[0])+'\n')
         resultScore.insert(END,'RandIndex: '+str(list_metrics[1])+'\n')
+        resultScore.insert(END,'Davis-Bouldin: '+str(list_metrics[2])+'\n')
+        resultScore.insert(END,'Dunn Index: '+str(list_metrics[3])+'\n')
+        resultScore.insert(END,'ASWC score: '+str(list_metrics[4])+'\n')
 
     else:
         resultData.delete(1.0,END)

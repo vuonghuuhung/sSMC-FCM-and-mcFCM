@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from sklearn import metrics
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler,StandardScaler
 
 def data_overiew(df, message):
     print(f'{message}:')
@@ -214,8 +214,10 @@ def ssmcfcm(dataname='iris',mL=2,mU=5,percent=20):
     supervise =supervise_rand(len(data),percent)
     centre,unSupCen = initCentre(data,numClusters,supervise,labels)
     diff = 100
-    epsilon = 0.005
+    epsilon = 0.00005
+    looptimes = 0
     while diff > epsilon:
+        looptimes +=1
         degree = updateU(data,centre,mL,mU,supervise,labels)
         centre,diff = calculate_centre(data, centre, degree,mL, mU,supervise,labels)
 
@@ -230,7 +232,7 @@ def ssmcfcm(dataname='iris',mL=2,mU=5,percent=20):
     # print(centre)
     # print(metrics.rand_score(clus_label,labels))
     # print(metrics.accuracy_score(clus_label,labels))
-    return data,centre,labels,clus_label,supervise
+    return data,centre,labels,clus_label,supervise,looptimes
 
 if __name__ == '__main__':
     ssmcfcm()
