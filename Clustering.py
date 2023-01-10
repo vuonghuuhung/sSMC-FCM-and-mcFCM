@@ -8,6 +8,7 @@ import os
 from tkinter.ttk import *
 from tkinter import *
 import tkinter.scrolledtext as sctxt
+from prettytable import PrettyTable
 # from PIL import ImageTk, Image
 
 
@@ -18,6 +19,8 @@ win.geometry('1050x600')
 win['bg'] = '#90ee90'
 # win.attributes('-topmost', True)  # the window is always visible even if you switch to another page
 
+x=PrettyTable()
+y=PrettyTable()
 
 #Tạo label
 font_ = ('Times New Roman',16)
@@ -66,22 +69,34 @@ def runMCFCM():
 
         resultLabel.delete(1.0,END)
         resultData.delete(1.0,END)
+        x.clear()
+        y.clear() 
+        
         for i in range(len(centre)):
             for j in range(len(centre[0])):
                 centre[i][j] = round(centre[i][j],2)
 
-        resultLabel.insert(END,'Cụm  ||  Số điểm thuộc cụm  ||  Thông tin\n')
+        x.field_names = ["Cụm", "Số điểm thuộc cụm ", "Thông tin"]
+        # resultLabel.insert(END,'Cụm    ||  Số điểm thuộc cụm  ||  Thông tin\n')
         for i in range(len(centre)):
             nums = clus_label.count(i)
-            resultLabel.insert(END,'Cụm '+str(i)+'  ||  ' +str(nums)+'   ||  '+str(centre[i])+'\n')
+            # resultLabel.insert(END,'Cụm '+str(i)+'  ||        ' +str(nums)+'          ||  '+str(centre[i])+'\n')
+            x.add_row(['Cụm  '+str(i), str(nums), str(centre[i])])
+        resultLabel.insert(END, x)  # Inserting table in text widget
+        # resultLabel.insert(END,'Cụm  ||  Số điểm thuộc cụm  ||  Thông tin\n')
 
         for i in range(len(data)):
             for j in range(len(data[0])):
                 data[i][j] = round(data[i][j],2)
 
-        resultData.insert(END,'POINT  ||  Nhãn phân cụm  ||  Nhãn dữ liệu   ||   Dữ liệu\n')
+        y.field_names = ["POINT", "Nhãn phân cụm", "Nhãn dữ liệu", "Dữ liệu"]
+        # resultData.insert(END,'POINT  ||  Nhãn phân cụm  ||  Nhãn dữ liệu   ||   Dữ liệu\n')
         for i in range(len(data)):
-            resultData.insert(END,'Point '+str(i)+'   ||   '+ str(clus_label[i])+'   ||   '+str(labels[i])+'   ||   '+str(data[i])+'\n')
+            y.add_row(['Point  '+str(i), str(clus_label[i]), str(labels[i]), str(data[i])])
+            # resultData.insert(END,'Point '+str(i)+'   ||   '+ str(clus_label[i])+'   ||   '+str(labels[i])+'   ||   '+str(data[i])+'\n')
+        resultData.insert(INSERT, y)  # Inserting table in text widget
+
+        # resultData.insert(END,'POINT  ||  Nhãn phân cụm  ||  Nhãn dữ liệu   ||   Dữ liệu\n')
 
         resultScore.delete(1.0,END)
         list_metrics = MetricsCalculate.getmetrics(labels,clus_label,centre,data)
@@ -107,22 +122,33 @@ def runSSMC():
 
         resultLabel.delete(1.0,END)
         resultData.delete(1.0,END)
+
+        x.clear()
+        y.clear()
+
         for i in range(len(centre)):
             for j in range(len(centre[0])):
                 centre[i][j] = round(centre[i][j],2)
 
-        resultLabel.insert(END,'Cụm  ||  Số điểm thuộc cụm  ||  Thông tin\n')
+        x.field_names = ["Cụm", "Số điểm thuộc cụm ", "Thông tin"]
+        # resultLabel.insert(END,'Cụm  ||  Số điểm thuộc cụm  ||  Thông tin\n')
         for i in range(len(centre)):
             nums = clus_label.count(i)
-            resultLabel.insert(END,'Cụm '+str(i)+'  ||  ' +str(nums)+'   ||  '+str(centre[i])+'\n')
+            # resultLabel.insert(END,'Cụm '+str(i)+'  ||  ' +str(nums)+'   ||  '+str(centre[i])+'\n')
+            x.add_row(['Cụm  '+str(i), str(nums), str(centre[i])])
+        resultLabel.insert(END, x)  # Inserting table in text widget
 
         for i in range(len(data)):
             for j in range(len(data[0])):
                 data[i][j] = round(data[i][j],2)
 
-        resultData.insert(END,'POINT  ||   Giám sát   ||   Nhãn phân cụm  ||  Nhãn dữ liệu   ||   Dữ liệu\n')
+        y.field_names = ["POINT", "Giám sát ", "Nhãn phân cụm", "Nhãn dữ liệu", "Dữ liệu"]
+
+        # resultData.insert(END,'POINT  ||   Giám sát   ||   Nhãn phân cụm  ||  Nhãn dữ liệu   ||   Dữ liệu\n')
         for i in range(len(data)):
-            resultData.insert(END,'Point '+str(i)+'   ||   '+str(supervise[i])+'   ||   '+ str(clus_label[i])+'   ||   '+str(labels[i])+'   ||   '+str(data[i])+'\n')
+            # resultData.insert(END,'Point '+str(i)+'   ||   '+str(supervise[i])+'   ||   '+ str(clus_label[i])+'   ||   '+str(labels[i])+'   ||   '+str(data[i])+'\n')
+            y.add_row(['Point  '+str(i), str(supervise[i]),  str(clus_label[i]), str(labels[i]), str(data[i])])
+        resultData.insert(INSERT, y)  # Inserting table in text widget
 
 
         resultScore.delete(1.0,END)
