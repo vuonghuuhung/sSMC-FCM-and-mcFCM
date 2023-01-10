@@ -6,7 +6,7 @@ import MetricsCalculate
 from tkinter.ttk import *
 from tkinter import *
 import tkinter.scrolledtext as sctxt
-from PIL import ImageTk, Image
+# from PIL import ImageTk, Image
 
 #Open window in Tkinter
 win = Tk()
