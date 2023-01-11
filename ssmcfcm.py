@@ -225,15 +225,16 @@ def ssmcfcm(dataname='iris',mL=2,mU=5,percent=20):
 
     clus_label = [np.argmax(degree[i]) for i in range(len(degree))]
 
-    # print(labels)
-    # print(supervise)
-    # print(np.array(clus_label))
+    if len(unSupCen) >= 2:
+        clus_label,centre = synchronize_label(labels,clus_label,numClusters,centre)
+
+    # print(clus_label)
     # print(centre)
     # print(metrics.rand_score(clus_label,labels))
     # print(metrics.accuracy_score(clus_label,labels))
     return data,centre,labels,clus_label,supervise,looptimes
 
 if __name__ == '__main__':
-    ssmcfcm('glass.csv',2,5,20)
+    ssmcfcm()
 
 
