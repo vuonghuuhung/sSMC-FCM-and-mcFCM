@@ -68,5 +68,5 @@ def loop_for_ssmcfcm(dataname,mL,mU,percent):
     print("Dunn Index: " + str(round(DunnIndex_average, 6)) + "\n")
     print("ASWC: " + str(round(ASWC_average, 6)) + "\n")
 
-# loop_for_mcfcm('glass.csv',1.7,2.1)
-loop_for_ssmcfcm('glass.csv',2,7,20)
+loop_for_mcfcm('iris.csv',1.7,2.1)
+# loop_for_ssmcfcm('glass.csv',2,7,20)+

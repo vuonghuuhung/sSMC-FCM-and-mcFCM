@@ -53,11 +53,11 @@ def getASWC(cluslabels,centre,data):
         for j in range(len(data)):
             if i!=j:
                 if cluslabels[i]!=cluslabels[j]:
-                    ai +=np.linalg.norm(data[i]-data[j])
-                    counta +=1
-                else:
-                    bi += np.linalg.norm(data[i]-data[j])
+                    bi +=np.linalg.norm(data[i]-data[j])
                     countb +=1
+                else:
+                    ai += np.linalg.norm(data[i]-data[j])
+                    counta +=1
         b.append(bi/countb)
         a.append(ai/counta)
 
